@@ -1,3 +1,5 @@
+exclude: \.md$
+
 repos:
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.9.26
@@ -9,6 +11,7 @@ repos:
     hooks:
       - id: ruff-check
         args: [--fix]
+
       - id: ruff-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
