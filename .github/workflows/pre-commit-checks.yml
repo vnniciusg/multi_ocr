@@ -1,7 +1,7 @@
 name: Pre-commit Checks
 
 on:
-  pull-requests:
+  pull_requests:
     paths:
       - "src/**"
       - "tests/**"
