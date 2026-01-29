@@ -30,9 +30,9 @@ class NumarkdownOCRModel(BaseOCRModel):
         self._model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             self._config.ocr_model_id,
             torch_dtype=self._config.torch_dtype,
-            attn_implementation=self.config.attn_implementation,
+            attn_implementation=self._config.attn_implementation,
             device_map="auto" if device == "cuda" else device,
-            trust_remote_code=self.config.trust_remote_code,
+            trust_remote_code=self._config.trust_remote_code,
         )
 
     def process_image(
