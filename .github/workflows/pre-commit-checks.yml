@@ -1,10 +1,13 @@
 name: Pre-commit Checks
 
 on:
-  pull_requests:
+  pull_request:
     paths:
       - "src/**"
       - "tests/**"
+      - "pyproject.toml"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/pre-commit-checks.yml"
     paths-ignore:
       - "**/*.md"
 
@@ -14,6 +17,9 @@ on:
     paths:
       - "src/**"
       - "tests/**"
+      - "pyproject.toml"
+      - ".pre-commit-config.yaml"
+      - ".github/workflows/pre-commit-checks.yml"
     paths-ignore:
       - "**/*.md"
 
@@ -24,10 +30,10 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install UV
+      - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
@@ -36,8 +42,8 @@ jobs:
       - name: Set up Python
         run: uv python install
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: uv sync --group dev
 
-      - name: Run Pre-commit
+      - name: Run pre-commit
         run: uv run pre-commit run --all-files --show-diff-on-failure --color=always
