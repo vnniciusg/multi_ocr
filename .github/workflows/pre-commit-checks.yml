@@ -8,8 +8,6 @@ on:
       - "pyproject.toml"
       - ".pre-commit-config.yaml"
       - ".github/workflows/pre-commit-checks.yml"
-    paths-ignore:
-      - "**/*.md"
 
   push:
     branches:
@@ -20,8 +18,6 @@ on:
       - "pyproject.toml"
       - ".pre-commit-config.yaml"
       - ".github/workflows/pre-commit-checks.yml"
-    paths-ignore:
-      - "**/*.md"
 
 permissions:
   contents: read
