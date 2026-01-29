@@ -4,7 +4,21 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "click>=8.1.0",
+    "loguru>=0.7.3",
+    "pillow>=12.1.0",
+    "torch>=2.10.0",
+    "torchvision>=0.25.0",
+    "transformers[torch]>=5.0.0",
+]
+
+[project.scripts]
+multi-ocr = "multi_ocr.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
