@@ -14,8 +14,16 @@ A Python library that provides a unified interface for multiple OCR models.
 - Python >= 3.13
 - PyTorch, Transformers, Pillow
 
-## Installation
 
+
+## Installation
+1. Clone Repo
+
+```bash
+git clone https://github.com/vnniciusg/multi_ocr
+```
+
+2. Install dependencies
 ```bash
 uv sync
 ```
