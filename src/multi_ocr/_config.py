@@ -34,6 +34,7 @@ OCR_PRESET_CONFIGS: dict[OCRModelType, OCRModelConfig] = {
     OCRModelType.GOT_OCR: OCRModelConfig(
         ocr_model_id="stepfun-ai/GOT-OCR-2.0-hf",
         ocr_model_type=OCRModelType.GOT_OCR,
+        attn_implementation="eager",
     ),
     OCRModelType.DEEPSEEK_OCR: OCRModelConfig(
         ocr_model_id="deepseek-ai/DeepSeek-OCR",
