@@ -7,7 +7,6 @@ A Python library that provides a unified interface for multiple OCR models.
 | Model         | ID                          | Type flag      |
 | ------------- | --------------------------- | -------------- |
 | GOT-OCR 2.0   | `stepfun-ai/GOT-OCR-2.0-hf` | `got-ocr`      |
-| DeepSeek-OCR  | `deepseek-ai/DeepSeek-OCR`  | `deepseek-ocr` |
 | LightOn-OCR 2 | `lightonai/LightOnOCR-2-1B` | `lighton-ocr`  |
 
 ## Requirements

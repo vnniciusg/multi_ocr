@@ -3,7 +3,6 @@ from typing import ClassVar
 from ._config import OCR_PRESET_CONFIGS, OCRModelConfig, OCRModelID, OCRModelType
 from ._ocr_models import (
     BaseOCRModel,
-    DeepSeekOCRModel,
     GotOCRModel,
     LightOnOCRModel,
 )
@@ -12,7 +11,6 @@ from ._ocr_models import (
 class MultiOCRFactory:
     _MODEL_REGISTRY: ClassVar[dict[OCRModelType, type[BaseOCRModel]]] = {
         OCRModelType.GOT_OCR: GotOCRModel,
-        OCRModelType.DEEPSEEK_OCR: DeepSeekOCRModel,
         OCRModelType.LIGHTON_OCR: LightOnOCRModel,
     }
 
@@ -28,7 +26,6 @@ __all__ = [
     "OCR_PRESET_CONFIGS",
     "BaseOCRModel",
     "GotOCRModel",
-    "DeepSeekOCRModel",
     "LightOnOCRModel",
     "MultiOCRFactory",
 ]

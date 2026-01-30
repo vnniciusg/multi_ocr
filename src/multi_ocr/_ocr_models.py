@@ -1,5 +1,3 @@
-import os
-import tempfile
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, ClassVar
@@ -109,52 +107,6 @@ class GotOCRModel(BaseOCRModel):
             output_ids[0, inputs["input_ids"].shape[1] :], skip_special_tokens=True
         )
         return OCRResult(text=raw_output, raw_output=raw_output)
-
-
-class DeepSeekOCRModel(BaseOCRModel):
-    model_class = "AutoModel"
-    processor_class = None
-    tokenizer_class = "AutoTokenizer"
-
-    def _model_kwargs(self) -> dict[str, Any]:
-        return {
-            "trust_remote_code": self._config.trust_remote_code,
-            "use_safetensors": True,
-        }
-
-    def load_model(self) -> None:
-        super().load_model()
-        device = self._get_device()
-        self._model = self._model.eval().to(device).to(self._config.torch_dtype)
-
-    def process_image(
-        self, image: Image, prompt: str | None = None, **kwargs: Any
-    ) -> OCRResult:
-        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
-            image.save(f, format="PNG")
-            tmp_path = f.name
-
-        try:
-            ocr_prompt = (
-                prompt or "<image>\n<|grounding|>Convert the document to markdown. "
-            )
-            custom = self._config.custom_params
-
-            res = self._model.infer(
-                self._tokenizer,
-                prompt=ocr_prompt,
-                image_file=tmp_path,
-                output_path=tempfile.gettempdir(),
-                base_size=custom.get("base_size", 1024),
-                image_size=custom.get("image_size", 640),
-                crop_mode=custom.get("crop_mode", True),
-                save_results=False,
-                test_compress=True,
-            )
-            text = res if isinstance(res, str) else str(res)
-            return OCRResult(text=text, raw_output=text)
-        finally:
-            os.unlink(tmp_path)
 
 
 class LightOnOCRModel(BaseOCRModel):
