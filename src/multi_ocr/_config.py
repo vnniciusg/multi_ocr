@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 import torch
 
@@ -19,7 +19,7 @@ class OCRModelType(StrEnum):
 class OCRModelConfig:
     ocr_model_id: OCRModelID
     ocr_model_type: OCRModelType
-    device: Optional[str] = field(default=None)
+    device: str | None = field(default=None)
     torch_dtype: torch.dtype = torch.bfloat16
     attn_implementation: str = field(default="sdpa")
     trust_remote_code: bool = True

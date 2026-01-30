@@ -4,7 +4,7 @@ from pathlib import Path
 import click
 from PIL import Image
 
-from . import MultiOCRFactory, OCRModelType, OCR_PRESET_CONFIGS
+from . import OCR_PRESET_CONFIGS, MultiOCRFactory, OCRModelType
 
 
 def build_config(
@@ -32,9 +32,7 @@ def build_config(
 @click.command()
 @click.argument("model", type=click.Choice([m.value for m in OCRModelType]))
 @click.argument("image", type=click.Path(exists=True, path_type=Path))
-@click.option(
-    "--device", type=str, default=None, help="Device to use (e.g., 'cuda', 'cpu')."
-)
+@click.option("--device", type=str, default=None, help="Device to use (e.g., 'cuda', 'cpu').")
 @click.option("--temperature", type=float, default=None, help="Sampling temperature.")
 @click.option(
     "--max-new-tokens",

@@ -38,7 +38,7 @@ class BaseOCRModel(ABC):
         self._tokenizer = None
 
     def _load_component(self, class_name: str, **kwargs: Any):
-        import transformers
+        import transformers  # noqa: PLC0415
 
         cls = getattr(transformers, class_name)
         return cls.from_pretrained(self._config.ocr_model_id, **kwargs)
@@ -57,9 +57,7 @@ class BaseOCRModel(ABC):
 
     def load_model(self) -> None:
         if self.processor_class:
-            self._processor = self._load_component(
-                self.processor_class, **self._processor_kwargs()
-            )
+            self._processor = self._load_component(self.processor_class, **self._processor_kwargs())
 
         if self.tokenizer_class:
             self._tokenizer = self._load_component(
@@ -87,9 +85,7 @@ class BaseOCRModel(ABC):
 class GotOCRModel(BaseOCRModel):
     model_class = "AutoModelForImageTextToText"
 
-    def process_image(
-        self, image: Image, prompt: str | None = None, **kwargs: Any
-    ) -> OCRResult:
+    def process_image(self, image: Image, prompt: str | None = None, **kwargs: Any) -> OCRResult:
         inputs = self._processor(image, return_tensors="pt").to(self._model.device)
 
         with torch.inference_mode():
@@ -98,9 +94,7 @@ class GotOCRModel(BaseOCRModel):
                 do_sample=False,
                 tokenizer=self._processor.tokenizer,
                 stop_strings="<|im_end|>",
-                max_new_tokens=kwargs.get(
-                    "max_new_tokens", self._config.max_new_tokens
-                ),
+                max_new_tokens=kwargs.get("max_new_tokens", self._config.max_new_tokens),
             )
 
         raw_output = self._processor.decode(
@@ -124,9 +118,7 @@ class LightOnOCRModel(BaseOCRModel):
             "device_map": "auto" if device == "cuda" else device,
         }
 
-    def process_image(
-        self, image: Image, prompt: str | None = None, **kwargs: Any
-    ) -> OCRResult:
+    def process_image(self, image: Image, prompt: str | None = None, **kwargs: Any) -> OCRResult:
         messages = [{"role": "user", "content": [{"type": "image", "image": image}]}]
 
         inputs = self._processor.apply_chat_template(
@@ -143,18 +135,14 @@ class LightOnOCRModel(BaseOCRModel):
             dtype = torch.float32
 
         inputs = {
-            k: v.to(device=device, dtype=dtype)
-            if v.is_floating_point()
-            else v.to(device)
+            k: v.to(device=device, dtype=dtype) if v.is_floating_point() else v.to(device)
             for k, v in inputs.items()
         }
 
         with torch.inference_mode():
             output_ids = self._model.generate(
                 **inputs,
-                max_new_tokens=kwargs.get(
-                    "max_new_tokens", self._config.max_new_tokens
-                ),
+                max_new_tokens=kwargs.get("max_new_tokens", self._config.max_new_tokens),
             )
 
         generated_ids = output_ids[0, inputs["input_ids"].shape[1] :]

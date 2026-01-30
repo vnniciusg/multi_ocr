@@ -20,12 +20,12 @@ class MultiOCRFactory:
 
 
 __all__ = [
-    "OCRModelID",
-    "OCRModelConfig",
-    "OCRModelType",
     "OCR_PRESET_CONFIGS",
     "BaseOCRModel",
     "GotOCRModel",
     "LightOnOCRModel",
     "MultiOCRFactory",
+    "OCRModelConfig",
+    "OCRModelID",
+    "OCRModelType",
 ]
