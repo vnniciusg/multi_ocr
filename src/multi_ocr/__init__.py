@@ -1,17 +1,23 @@
 from typing import ClassVar
 
-from .config import OCRModelID, OCRModelConfig, OCRModelType, OCR_PRESET_CONFIGS
-from .models.base_ocr_model import BaseOCRModel
-from .models.numarkdown_ocr_model import NumarkdownOCRModel
+from ._config import OCR_PRESET_CONFIGS, OCRModelConfig, OCRModelID, OCRModelType
+from ._ocr_models import (
+    BaseOCRModel,
+    DeepSeekOCRModel,
+    GotOCRModel,
+    LightOnOCRModel,
+)
 
 
 class MultiOCRFactory:
-    _MODEL_REGISTRY: ClassVar[dict[OCRModelType, BaseOCRModel]] = {
-        OCRModelType.NUMARKDOWN: NumarkdownOCRModel
+    _MODEL_REGISTRY: ClassVar[dict[OCRModelType, type[BaseOCRModel]]] = {
+        OCRModelType.GOT_OCR: GotOCRModel,
+        OCRModelType.DEEPSEEK_OCR: DeepSeekOCRModel,
+        OCRModelType.LIGHTON_OCR: LightOnOCRModel,
     }
 
     @classmethod
-    def get_ocr_model(cls, *, ocr_model_type: OCRModelType) -> BaseOCRModel:
+    def get_ocr_model(cls, *, ocr_model_type: OCRModelType) -> type[BaseOCRModel]:
         return cls._MODEL_REGISTRY.get(ocr_model_type)
 
 
@@ -20,6 +26,9 @@ __all__ = [
     "OCRModelConfig",
     "OCRModelType",
     "OCR_PRESET_CONFIGS",
-    "NumarkdownOCRModel",
+    "BaseOCRModel",
+    "GotOCRModel",
+    "DeepSeekOCRModel",
+    "LightOnOCRModel",
     "MultiOCRFactory",
 ]
