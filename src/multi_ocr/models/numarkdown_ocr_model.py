@@ -44,19 +44,21 @@ class NumarkdownOCRModel(BaseOCRModel):
             add_generation_prompt=True,
         )
 
-        _inputs = self.processor(
+        _inputs = self._processor(
             text=[_text_prompt], images=[image], return_tensors="pt"
-        ).to(self.model.device)
+        ).to(self._model.device)
 
         with torch.inference_mode():
-            output_ids = self.model.generate(
+            output_ids = self._model.generate(
                 **_inputs,
-                temperature=kwargs.get("temperature", self.config.temperature),
-                max_new_tokens=kwargs.get("max_new_tokens", self.config.max_new_tokens),
+                temperature=kwargs.get("temperature", self._config.temperature),
+                max_new_tokens=kwargs.get(
+                    "max_new_tokens", self._config.max_new_tokens
+                ),
             )
 
-        _raw_output = self.processor.decode(output_ids[0], skip_special_tokens=True)
-        _content, _reasoning = self._split_awnser_and_reasoning(raw_output=_raw_output)
+        _raw_output = self._processor.decode(output_ids[0], skip_special_tokens=True)
+        _content, _reasoning = self._split_answer_and_reasoning(raw_output=_raw_output)
 
         return OCRResult(text=_content, reasoning=_reasoning, raw_output=_raw_output)
 
@@ -66,6 +68,9 @@ class NumarkdownOCRModel(BaseOCRModel):
         _reasoning_match = self.THINKING_REGEX_PATTERN.search(raw_output)
         _answer_match = self.ANSWER_REGEX_PATTERN.search(raw_output)
 
-        return _reasoning_match.group("think").strip(), _answer_match.group(
-            "answer"
-        ).strip()
+        _reasoning = (
+            _reasoning_match.group("think").strip() if _reasoning_match else None
+        )
+        _answer = _answer_match.group("answer").strip() if _answer_match else raw_output
+
+        return _answer, _reasoning
